@@ -1,34 +1,49 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from mpl_toolkits.mplot3d import Axes3D
+
 
 def visualize_clusters(X_reduced, labels, mask_missing, output_path, is_3d=False):
     if is_3d and X_reduced.shape[1] >= 3:
-        from mpl_toolkits.mplot3d import Axes3D
         fig = plt.figure(figsize=(8, 6))
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter(X_reduced[:, 0], X_reduced[:, 1], X_reduced[:, 2], c=labels, cmap='viridis', s=50)
         for i in range(X_reduced.shape[0]):
             if mask_missing[i].any():
                 ax.scatter(X_reduced[i, 0], X_reduced[i, 1], X_reduced[i, 2], facecolors='none', edgecolors='red', s=100)
+        ax.set_title("Visualización de Clusters (3D)")
+        ax.set_xlabel("PC1")
+        ax.set_ylabel("PC2")
+        ax.set_zlabel("PC3")
     else:
         plt.figure(figsize=(8, 6))
-        plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=labels, cmap='viridis', s=50)
+        plt.scatter(X_reduced[:, 0], X_reduced[:, 1], c=labels, cmap='viridis', s=50, label="Original")
         plt.scatter(X_reduced[mask_missing.any(axis=1), 0],
                     X_reduced[mask_missing.any(axis=1), 1],
-                    facecolors='none', edgecolors='red', s=100)
+                    facecolors='none', edgecolors='red', s=100, linewidths=1.5, label="Imputados")
+        plt.title("Visualización de Clusters (2D) con imputación KNN")
+        plt.xlabel("Componente principal 1")
+        plt.ylabel("Componente principal 2")
+        plt.grid(True)
+        plt.legend(loc='upper right')
     plt.savefig(output_path)
     plt.close()
 
 def plot_cluster_centers(model, feature_names):
     if not hasattr(model, "cluster_centers_"):
-        print("[AVISO] El modelo no tiene centroides.")
+        print("[AVISO] El modelo no tiene centroides (no es KMeans).")
         return
+
     centers_df = pd.DataFrame(model.cluster_centers_, columns=feature_names)
     centers_df.index = [f"Cluster {i}" for i in range(centers_df.shape[0])]
+
     plt.figure(figsize=(10, 6))
     sns.heatmap(centers_df, annot=True, fmt=".2f", cmap="coolwarm")
-    plt.title("Valores promedio por cluster")
+    plt.title("Valores promedio de cada feature por cluster (centroides)")
+    plt.ylabel("Clusters")
+    plt.xlabel("Features")
+    plt.tight_layout()
     plt.savefig("outputs/cluster_centers_heatmap.png")
     plt.close()
 

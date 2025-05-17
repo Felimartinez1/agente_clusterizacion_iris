@@ -1,3 +1,0 @@
-- Arreglar bug de por qué cambiaron algunos valores desde que modularizamos las funciones provenientes de Experimentation.ipynb
-- Elaborar README
-- Subir a git

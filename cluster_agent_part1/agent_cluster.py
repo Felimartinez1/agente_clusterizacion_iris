@@ -38,7 +38,7 @@ def main(path_csv, is_3d, algorithm):
     if algorithm == "kmeans":
         plot_cluster_centers(model, feature_cols)
 
-    print("[✔] Proceso finalizado.")
+    print("[INFO] Proceso finalizado.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
