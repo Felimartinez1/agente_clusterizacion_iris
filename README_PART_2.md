@@ -68,19 +68,19 @@ Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y
        └────────────── Muestra respuesta final al usuario ◀─────────
 ```
        
-1- Usuario escribe una instrucción (ej. "Clusterizá el dataset en 3D con DBSCAN").
+1. Usuario escribe una instrucción (ej. "Clusterizá el dataset en 3D con DBSCAN").
 
-2- El Agente recibe el input y lo pasa al LLM simulado (FakeSimpleLLM).
+2. El Agente recibe el input y lo pasa al LLM simulado (FakeSimpleLLM).
 
-3- El LLM interpreta el texto y:
+3. El LLM interpreta el texto y:
     * Si detecta términos como “cluster”, “dbscan”, “kmeans”, etc., construye una llamada a herramienta (tool_calls).
 
     * Si no entiende, devuelve un mensaje como "No entiendo la instrucción.".
 
-4- Si hay una llamada válida, el Agente ejecuta la herramienta ejecutar_cluster_agente.
+4. Si hay una llamada válida, el Agente ejecuta la herramienta ejecutar_cluster_agente.
 
-5- La herramienta corre la función main() que hace clustering.
+5. La herramienta corre la función main() que hace clustering.
 
-6- El output (logs o resumen del clustering) se devuelve al agente.
+6. El output (logs o resumen del clustering) se devuelve al agente.
 
-7- El agente muestra la salida al Usuario mediante el directorio outputs/nlp_agent/.
+7. El agente muestra la salida al Usuario mediante el directorio outputs/nlp_agent/.
