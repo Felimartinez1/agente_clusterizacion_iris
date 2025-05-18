@@ -27,14 +27,13 @@ def main(path_csv, output_prefix, is_3d, algorithm, k_clusters=None):
     else:
         k = None
 
-
     print("[INFO] Ejecutando clustering...")
     labels, model = cluster_data(X_processed, algorithm=algorithm, k=k)
 
     anova_results = analyze_feature_importance(df_imputed, labels, feature_cols)
     plot_anova_boxplots(df_imputed, labels, anova_results, output_prefix)
 
-    save_result(df_imputed, labels, output_prefix)
+    output_path = save_result(df_imputed, labels, output_prefix)
 
     if X_processed.shape[1] >= 2:
         X_reduced = reduce_dimensions(X_processed, n_components=3 if is_3d else 2)
@@ -44,6 +43,18 @@ def main(path_csv, output_prefix, is_3d, algorithm, k_clusters=None):
         plot_cluster_centers(model, feature_cols, output_prefix)
 
     print("[INFO] Proceso finalizado.")
+
+    # Crear resumen simple del proceso
+    resumen = f"""
+    Clustering realizado con {algorithm.upper()}
+    Cantidad de puntos: {len(df_imputed)}
+    Clusters generados: {len(set(labels)) if algorithm != 'dbscan' else len(set(labels)) - (1 if -1 in labels else 0)}
+    Columnas utilizadas: {', '.join(feature_cols)}
+    Archivo de salida: {output_path}
+    """
+
+    return resumen.strip()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

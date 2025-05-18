@@ -15,4 +15,6 @@ def analyze_feature_importance(df, labels, feature_cols):
 def save_result(df_original, labels, output_prefix):
     df_result = df_original.copy()
     df_result['cluster'] = labels
-    df_result.to_csv(os.path.join(output_prefix, "resultado_cluster.csv"), index=False)
+    output_path = os.path.join(output_prefix, "resultado_cluster.csv")
+    df_result.to_csv(output_path, index=False)
+    return output_path

@@ -56,9 +56,8 @@ def ejecutar_cluster_agente(path_csv: str, output_prefix=str, algorithm: str = "
     buffer = io.StringIO()
     try:
         with redirect_stdout(buffer):
-            main(path_csv, output_prefix, is_3d=is_3d, algorithm=algorithm, k_clusters=k_clusters)
-        output = buffer.getvalue()
-        return "[INFO] Ejecución del agente completada exitosamente.\n" + output
+            resumen = main(path_csv, output_prefix, is_3d=is_3d, algorithm=algorithm, k_clusters=k_clusters)
+        return "[INFO] Ejecución completada.\n" + resumen
     except Exception as e:
         return f"[INFO] Falló la ejecución: {e}"
     finally:
