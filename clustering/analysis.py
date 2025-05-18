@@ -1,5 +1,6 @@
 import pandas as pd
 from scipy.stats import f_oneway
+import os
 
 def analyze_feature_importance(df, labels, feature_cols):
     df_clustered = df.copy()
@@ -11,7 +12,7 @@ def analyze_feature_importance(df, labels, feature_cols):
         anova_results[feature] = {"F": f_stat, "p": p_val}
     return anova_results
 
-def save_result(df_original, labels, output_path):
+def save_result(df_original, labels, output_prefix):
     df_result = df_original.copy()
     df_result['cluster'] = labels
-    df_result.to_csv(output_path, index=False)
+    df_result.to_csv(os.path.join(output_prefix, "resultado_cluster.csv"), index=False)

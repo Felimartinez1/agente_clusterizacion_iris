@@ -5,10 +5,9 @@ Este script implementa un pipeline completo de clustering no supervisado con an�
 ---
 
 ## Cómo correrlo
-
 Desde un entorno con Python (>=3.8), instalá las dependencias necesarias:
 ```bash
-pip install -r requirements.txt
+python3.10 -m pip install -r requirements.txt
 ```
 
 Luego ejecutá:
@@ -30,8 +29,8 @@ python3.10 cluster_agent.py data/iris_data_challenge.csv --is_3d
 
 - Análisis explicativo: genera mapas de calor con centroides (kmeans) y boxplots por feature con resultados estadísticos (ANOVA).
 
-## Output
-Todos los resultados se guardan en la carpeta outputs/:
+## Outputs
+Todos los resultados del agente normal (sin Langchain) se guardan en la carpeta outputs/normal_agent/:
 
 * resultado_cluster.csv: archivo original con columna cluster añadida.
 
@@ -45,7 +44,7 @@ Todos los resultados se guardan en la carpeta outputs/:
 
 * anova_boxplots_clusters.png: boxplots de cada variable según los clusters.
 
-## Asumidos
+## Supuestos Asumidos
 
 * Se utiliza python 3.10
 

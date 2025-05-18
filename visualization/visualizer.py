@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from mpl_toolkits.mplot3d import Axes3D
+import os
 
-
-def visualize_clusters(X_reduced, labels, mask_missing, output_path, is_3d=False):
+def visualize_clusters(X_reduced, labels, mask_missing, output_prefix, is_3d=False):
     if is_3d and X_reduced.shape[1] >= 3:
         fig = plt.figure(figsize=(8, 6))
         ax = fig.add_subplot(111, projection='3d')
@@ -27,10 +27,10 @@ def visualize_clusters(X_reduced, labels, mask_missing, output_path, is_3d=False
         plt.ylabel("Componente principal 2")
         plt.grid(True)
         plt.legend(loc='upper right')
-    plt.savefig(output_path)
+    plt.savefig(os.path.join(output_prefix, "clusters_visual.png"))
     plt.close()
 
-def plot_cluster_centers(model, feature_names):
+def plot_cluster_centers(model, feature_names, output_prefix):
     if not hasattr(model, "cluster_centers_"):
         print("[AVISO] El modelo no tiene centroides (no es KMeans).")
         return
@@ -44,10 +44,11 @@ def plot_cluster_centers(model, feature_names):
     plt.ylabel("Clusters")
     plt.xlabel("Features")
     plt.tight_layout()
-    plt.savefig("outputs/cluster_centers_heatmap.png")
+    plt.savefig(os.path.join(output_prefix, "cluster_centers_heatmap.png"))
     plt.close()
 
-def plot_anova_boxplots(df, labels, anova_results):
+
+def plot_anova_boxplots(df, labels, anova_results, output_prefix):
     df_plot = df.copy()
     df_plot['cluster'] = labels
     variables = list(anova_results.keys())
@@ -58,5 +59,5 @@ def plot_anova_boxplots(df, labels, anova_results):
         sns.boxplot(x='cluster', y=var, data=df_plot, palette='Set2')
         plt.title(f"{var}\nF={anova_results[var]['F']:.3f}, p={anova_results[var]['p']:.4f}")
     plt.tight_layout()
-    plt.savefig("outputs/anova_boxplots_clusters.png")
+    plt.savefig(os.path.join(output_prefix, "anova_boxplots_clusters.png"))
     plt.close()

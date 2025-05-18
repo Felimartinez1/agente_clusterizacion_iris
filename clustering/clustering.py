@@ -3,8 +3,9 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.metrics import silhouette_score
 from scipy.spatial.distance import cdist
 import matplotlib.pyplot as plt
+import os
 
-def choose_k(X, k_max=10):
+def choose_k(X, output_prefix, k_max=10):
     scores, distortions = [], []
 
     for k in range(2, k_max + 1):
@@ -20,7 +21,7 @@ def choose_k(X, k_max=10):
     plt.xlabel("Número de clusters (k)")
     plt.ylabel("Silhouette Score")
     plt.grid(True)
-    plt.savefig("outputs/silhouette_scores.png")
+    plt.savefig(os.path.join(output_prefix, "silhouette_scores.png"))
     plt.close()
 
     plt.figure()
@@ -28,7 +29,7 @@ def choose_k(X, k_max=10):
     plt.xlabel("Número de clusters (k)")
     plt.ylabel("Distorsión")
     plt.grid(True)
-    plt.savefig("outputs/elbow_method.png")
+    plt.savefig(os.path.join(output_prefix, "elbow_method.png"))
     plt.close()
 
     return best_k
