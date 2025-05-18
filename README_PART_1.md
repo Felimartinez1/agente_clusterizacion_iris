@@ -20,6 +20,16 @@ Si quisieras una visualización de los clusters en 3D:
 python3.10 cluster_agent.py data/iris_data_challenge.csv --is_3d
 ```
 
+Si quisieras usar otro tipo de algoritmo como DBSCAN:
+```bash
+python3.10 cluster_agent.py data/iris_data_challenge.csv --algorithm dbscan
+```
+
+Si quisieras asignar un numero de clusters específico (ignorando la automatización reflejada en el código para elegir la mejor cantidad de clusters):
+```bash
+python3.10 cluster_agent.py data/iris_data_challenge.csv --k_clusters 4
+```
+
 ## Decisiones de diseño principales
 - Pipeline autónomo y modular: automatiza carga de raw dataset(pandas), selección de cantidad óptima de clusters (kmeans), imputación (KNN), normalización (StandardScaler), reducción de dimensionalidad (PCA) y análisis estadístico (ANOVA).
 
@@ -73,3 +83,6 @@ Todos los resultados del agente normal (sin Langchain) se guardan en la carpeta 
     * Cluster 1 contiene flores con pétalos más largos y anchos.
 
 * Las herramientas de visualización como boxplots y mapas de calor resultaron clave para validar la interpretación del modelo.
+* Hay dos diferencias clave entre KMeans y DBSCAN:
+    * DBSCAN resultó ser más efectivo a la hora de encontrar Outliers.
+    * KMeans resultó performar mejor cuando se quiere trabajar con más clusters.

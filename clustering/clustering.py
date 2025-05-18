@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.metrics import silhouette_score
 from scipy.spatial.distance import cdist
+from sklearn.neighbors import NearestNeighbors
 import matplotlib.pyplot as plt
 import os
 
@@ -34,11 +35,35 @@ def choose_k(X, output_prefix, k_max=10):
 
     return best_k
 
-def cluster_data(X, algorithm="kmeans", k=None):
+def estimate_eps(X, output_prefix, min_samples=2):
+    neighbors = NearestNeighbors(n_neighbors=min_samples)
+    neighbors_fit = neighbors.fit(X)
+    distances, _ = neighbors_fit.kneighbors(X)
+    distances = np.sort(distances[:, -1])  # Tomamos la distancia al k-ésimo vecino
+
+    # Graficar
+    plt.figure()
+    plt.plot(distances)
+    plt.xlabel("Puntos ordenados")
+    plt.ylabel(f"Distancia al {min_samples}º vecino más cercano")
+    plt.grid(True)
+    plt.savefig(os.path.join(output_prefix, "k_distance_plot.png"))
+    plt.close()
+
+    # Heurística: codo en la curva
+    # Buscamos el punto con mayor pendiente relativa (dif máxima)
+    diffs = np.diff(distances)
+    eps_estimate = distances[np.argmax(diffs)]
+
+    return eps_estimate
+
+def cluster_data(X, output_prefix, algorithm="kmeans", k=None):
     if algorithm == "kmeans":
         model = KMeans(n_clusters=k, random_state=42)
     elif algorithm == "dbscan":
-        model = DBSCAN(eps=0.5, min_samples=2)
+        min_samples = 2
+        eps = estimate_eps(X, output_prefix, min_samples=min_samples)
+        model = DBSCAN(eps=eps, min_samples=min_samples)
     else:
         raise ValueError(f"Algoritmo no soportado: {algorithm}")
     labels = model.fit_predict(X)

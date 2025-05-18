@@ -28,8 +28,8 @@ def main(path_csv, output_prefix, is_3d, algorithm, k_clusters=None):
         k = None
 
     print("[INFO] Ejecutando clustering...")
-    labels, model = cluster_data(X_processed, algorithm=algorithm, k=k)
-
+    labels, model = cluster_data(X_processed, output_prefix, algorithm=algorithm, k=k)
+    
     anova_results = analyze_feature_importance(df_imputed, labels, feature_cols)
     plot_anova_boxplots(df_imputed, labels, anova_results, output_prefix)
 

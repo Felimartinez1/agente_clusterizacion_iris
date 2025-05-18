@@ -16,8 +16,8 @@ python3.10 nlp_cluster_agent.py data/iris_data_challenge.csv
 Una vez ejecutado se te pedirá un prompt en el cual debes indicar instrucciones para el cluster como por ejemplo:
 ```bash
 -Clusterizá el dataset con KMeans en 3D
--Segmentá los datos usando DBSCAN
--Usá 4 clústers con KMeans y mostrá en 3D
+-Clusterizá los datos usando DBSCAN
+-Clusterizá usando 4 clusters con KMeans y mostrá en 3D
 ```
 El agente va a interpretar la instrucción, correr el análisis, y mostrarte los resultados en el directorio outputs/nlp_agent/.
 
@@ -42,30 +42,29 @@ Todos los resultados del agente de clusterización con insturcciones con nlp se 
 
 * anova_boxplots_clusters.png: boxplots de cada variable según los clusters.
 
+* k_distance_plot.png: gráfico de líneas que muestra el mejor eps posible.
+
 ## Supuestos Asumidos
 * Se utiliza python 3.10
-* Se deben mencionar ciertas palabras para que el modelo entienda que debe usar los parametros que se le piden.
-
-## Posibles mejoras
-Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y así hacerlo más flexible y natural, sin que el modelo dependa de la mención de una palabra hardcodeada.
+* Se deben mencionar ciertas palabras como "clusteriza" para que el modelo entienda que debe usar los parametros que se le piden.
 
 ## Diagrama de Flujo
 
 ```text
-+---------+            +-------------------+              +-------------------------+
-| Usuario |            |     Agente        |              |       Herramienta       |
-| (input) | ───────▶   | (LangChain Agent) | ───────▶     | ejecutar_cluster_agente |
-+---------+            |   + LLM (Fake)     |              |  (main clustering func) |
-                       +-------------------+              +-------------------------+
-       ▲                        │                                   │
-       │                        ▼                                   ▼
-       │                ¿Instrucción válida?                 Ejecuta clustering
-       │                (interpreta el texto)                y genera resultados
++---------+            +-------------------+              
+| Usuario |            |     Agente        |              
+|         | ───────▶  | (LangChain Agent) |     
++---------+            |   + LLM (Fake)    |              
+       ▲               +-------------------+               +-------------------------+ 
+       │                        │                          |       Herramienta       |         
+       │                        ▼                SI        | ejecutar_cluster_agente |        
+       │                ¿Instrucción válida? ───────────▶ |  (main clustering func) |  
+       │                (interpreta el texto)              +-------------------------+   
        │                        │                                   │
-       │                        └─────── Devuelve resultado ◀──────┘
-       │                                del clustering
-       │
-       └────────────── Muestra respuesta final al usuario ◀─────────
+       │                     NO │                                   │
+       │                        │                                   │ 
+       │                        ▼                                   │
+       └────────────── Muestra respuesta final al usuario ◀────────┘
 ```
        
 1. Usuario escribe una instrucción (ej. "Clusterizá el dataset en 3D con DBSCAN").
@@ -84,3 +83,14 @@ Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y
 6. El output (logs o resumen del clustering) se devuelve al agente.
 
 7. El agente muestra la salida al Usuario mediante el directorio outputs/nlp_agent/.
+
+## Posibles mejoras - Next steps
+- Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y así hacerlo más flexible y natural, sin que el modelo dependa de la mención de una palabra hardcodeada.
+- En el algoritmo DBSCAN, encontrar el numero óptimo de min_samples con un grid search.
+- Desarrollar una API.
+- Hacer un diseño con buena UX.
+- Desarrollar un frontend.
+- Dockerizar.
+- CI/CD.
+- Deploy en cloud.
+- Administrar containers una vez el proyecto sea lo suficientemente grande.
