@@ -50,6 +50,8 @@ Todos los resultados del agente de clusterización con insturcciones con nlp se 
 Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y así hacerlo más flexible y natural, sin que el modelo dependa de la mención de una palabra hardcodeada.
 
 ## Diagrama de Flujo
+
+```text
 +---------+            +-------------------+              +-------------------------+
 | Usuario |            |     Agente        |              |       Herramienta       |
 | (input) | ───────▶   | (LangChain Agent) | ───────▶     | ejecutar_cluster_agente |
@@ -64,6 +66,7 @@ Reemplazar FakeSimpleLLM por un modelo real (como GPT-4, LLaMA, Mistral, etc.) y
        │                                del clustering
        │
        └────────────── Muestra respuesta final al usuario ◀─────────
+```
        
 1- Usuario escribe una instrucción (ej. "Clusterizá el dataset en 3D con DBSCAN").
 
